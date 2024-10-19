@@ -10,6 +10,10 @@ RUN npm install
 FROM $NODE_VERSION as builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
+RUN echo "NODE_ENV=production" > .env \
+    echo "TEST_PUBLIC_VALUE=${TEST_PUBLIC_VALUE}" >> .env \
+    echo "TEST_SECRET_VALUE=${TEST_SECRET_VALUE}" >> .env
+
 COPY . .
 RUN npm run build
 

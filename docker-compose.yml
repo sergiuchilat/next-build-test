@@ -6,7 +6,7 @@ services:
       dockerfile: Dockerfile
     environment:
       - TEST_PUBLIC_VALUE
-      - TEST_PASSWORD
+      - TEST_SECRET_VALUE
     profiles:
       - build
   run:
