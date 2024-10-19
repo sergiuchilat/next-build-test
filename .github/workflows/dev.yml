@@ -15,6 +15,7 @@ jobs:
       - name: Parse env file
         id: parse-env
         run: |
+          echo ${{ vars.ENV_FILE }}
           for i in $ENV_FILE; do
             i=$(echo $i | sed 's/=.*//g')=$(echo ${i#*=} | base64 -di | base64 -di)
             echo ::add-mask::${i#*=}
@@ -30,6 +31,8 @@ jobs:
     name: Build and push
     runs-on: ubuntu-latest
     environment: dev
+    needs:
+      - parse-env
 
     steps:
       - name: Check out
