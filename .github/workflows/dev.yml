@@ -11,11 +11,11 @@ jobs:
     runs-on: ubuntu-latest
     environment: dev
     env:
-      ENV_FILE: ${{ vars.ENV_FILE }}
+      ENV_FILE: ${{ secrets.ENV_FILE }}
     steps:
       - name: Parse env file
         run: |
-          echo "ENV_FILE=${{ vars.ENV_FILE }}"
+          echo "ENV_FILE=${{ secrets.ENV_FILE }}"
           for i in $ENV_FILE; do
             i=$(echo $i | sed 's/=.*//g')=$(echo ${i#*=} | base64 -di | base64 -di)
             echo ::add-mask::${i#*=}
