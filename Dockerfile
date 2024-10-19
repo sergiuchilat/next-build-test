@@ -1,6 +1,6 @@
 ################## Optimized ##################
 
-ARG NODE_VERSION="node:16"
+ARG NODE_VERSION="node:18"
 
 FROM $NODE_VERSION as deps
 WORKDIR /app
