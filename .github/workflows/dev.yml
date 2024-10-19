@@ -24,4 +24,4 @@ jobs:
         run: |
           echo "${{ vars.ENV_FILE }}" > .env
           docker compose --env-file=.env -f docker-compose.yml --profile=build build
-          docker push ghcr.io/sergiuchilat/next-build-test:dev
+          docker push ghcr.io/sergiuchilat/next-build-test/front:dev
