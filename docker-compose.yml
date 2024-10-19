@@ -1,13 +1,13 @@
 services:
   build:
-    image: ghcr.io/sergiuchilat/next-build-test:dev
+    image: ghcr.io/sergiuchilat/next-build-test/front:dev
     build:
       context: .
       dockerfile: Dockerfile
     profiles:
       - build
   run:
-    image: ghcr.io/sergiuchilat/next-build-test:dev
+    image: ghcr.io/sergiuchilat/next-build-test/front:dev
     profiles:
       - run
 
