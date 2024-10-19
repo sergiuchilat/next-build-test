@@ -14,7 +14,7 @@ jobs:
     name: Parse env file
     runs-on: ubuntu-latest
     env:
-      ENV_FILE: ${{ secrets.ENV_FILE }}
+      ENV_FILE: ${{ vars.ENV_FILE }}
     steps:
       - name: Parse env file
         id: parse-env
