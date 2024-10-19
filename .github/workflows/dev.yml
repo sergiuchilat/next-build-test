@@ -19,7 +19,7 @@ jobs:
       - name: Parse env file
         id: parse-env
         run: |
-          echo $ENV_FILE > .env
+          echo "$ENV_FILE" > .env
           cat .env
 
   build:
