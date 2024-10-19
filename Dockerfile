@@ -11,8 +11,6 @@ FROM $NODE_VERSION as builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-COPY .env .env
-COPY secret.txt secret.txt
 RUN npm run build
 
 FROM $NODE_VERSION as runner
