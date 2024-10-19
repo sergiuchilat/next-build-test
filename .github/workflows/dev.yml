@@ -10,6 +10,8 @@ jobs:
     name: Parse env file
     runs-on: ubuntu-latest
     environment: dev
+    env:
+      ENV_FILE: ${{ vars.ENV_FILE }}
     steps:
       - name: Parse env file
         run: |
