@@ -4,8 +4,9 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    env_file:
-      - .env
+    environment:
+      - TEST_PUBLIC_VALUE
+      - TEST_PASSWORD
     profiles:
       - build
   run:

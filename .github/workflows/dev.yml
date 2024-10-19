@@ -6,34 +6,10 @@ on:
       - dev
 
 jobs:
-  parse-env:
-    name: Parse env file
-    runs-on: ubuntu-latest
-    environment: dev
-    env:
-      ENV_FILE: ${{ secrets.ENV_FILE }}
-    steps:
-      - name: Parse env file
-        run: |
-          echo "ENV_FILE=${{ secrets.ENV_FILE }}"
-          for i in $ENV_FILE; do
-            i=$(echo $i | sed 's/=.*//g')=$(echo ${i#*=} | base64 -di | base64 -di)
-            echo ::add-mask::${i#*=}
-            printf '%s\n' "$i" >> $GITHUB_ENV
-          done
-      - name: Validate env
-        run: |
-          echo "A=${{ env.A }}"
-          echo "B=${{ env.B }}"
-          echo "C=${{ env.C }}"  
-
   build:
     name: Build and push
     runs-on: ubuntu-latest
     environment: dev
-    needs:
-      - parse-env
-
     steps:
       - name: Check out
         uses: actions/checkout@v4
@@ -45,8 +21,11 @@ jobs:
           username: $${{ secrets.GHCR_USER }}
           password: ${{ secrets.GHCR_TOKEN }}
       - name: Build image and push to GitHub Packages
-
+        env:
+          TEST_PUBLIC_VALUE: ${{ vars.TEST_PUBLIC_VALUE }}
+          TEST_SECRET_VALUE: ${{ secrets.TEST_SECRET_VALUE }}
         run: |
-          cat .env
-          docker compose --env-file=.env -f docker-compose.yml --profile=build build
+          echo "TEST_PUBLIC_VALUE=${TEST_PUBLIC_VALUE}"
+          echo "TEST_SECRET_VALUE=${TEST_SECRET_VALUE}"
+          docker compose -f docker-compose.yml --profile=build build
           docker push ghcr.io/sergiuchilat/next-build-test/front:dev
