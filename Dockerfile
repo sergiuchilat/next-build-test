@@ -4,7 +4,7 @@ ARG NODE_VERSION="node:16"
 
 FROM $NODE_VERSION as deps
 WORKDIR /app
-COPY package.json package-lock.json .npmrc ./
+COPY package.json package-lock.json ./
 RUN npm install
 
 FROM $NODE_VERSION as builder
