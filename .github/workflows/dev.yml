@@ -23,5 +23,6 @@ jobs:
       - name: Build image and push to GitHub Packages
         run: |
           echo "${{ vars.ENV_FILE }}" > .env
+          cat .env
           docker compose --env-file=.env -f docker-compose.yml --profile=build build
           docker push ghcr.io/sergiuchilat/next-build-test/front:dev
