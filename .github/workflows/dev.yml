@@ -9,6 +9,7 @@ jobs:
   parse-env:
     name: Parse env file
     runs-on: ubuntu-latest
+    environment: dev
     steps:
       - name: Parse env file
         run: |
