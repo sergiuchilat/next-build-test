@@ -5,7 +5,7 @@ on:
     branches:
       - dev
   workflow_call:
-    secrets:
+    variables:
       env_file:
         required: true
         description: "Environment file content"
