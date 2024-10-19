@@ -1,0 +1,26 @@
+name: "Next 12 Deploy Job"
+
+on:
+  push:
+    branches:
+      - dev
+jobs:
+  build:
+    name: Build and push
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: $${{ secrets.GHCR_USER }}
+          password: ${{ secrets.GHCR_TOKEN }}
+      - name: Build image and push to GitHub Packages
+        run: |
+          echo "${{ vars.ENV_FILE }}" > .env
+          docker compose --env-file=.env -f docker/dev/docker-compose.yml build
+          docker push ghcr.io/sergiuchilat/next-build-test:dev
