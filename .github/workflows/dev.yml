@@ -4,7 +4,24 @@ on:
   push:
     branches:
       - dev
+  workflow_call:
+    secrets:
+      env_file:
+        required: true
+        description: "Environment file content"
 jobs:
+  parse-env:
+    name: Parse env file
+    runs-on: ubuntu-latest
+    env:
+      ENV_FILE: ${{ secrets.ENV_FILE }}
+    steps:
+      - name: Parse env file
+        id: parse-env
+        run: | 
+          echo "${{ ENV_FILE }}" > .env
+          cat .env
+
   build:
     name: Build and push
     runs-on: ubuntu-latest
@@ -13,12 +30,6 @@ jobs:
     steps:
       - name: Check out
         uses: actions/checkout@v4
-
-      - name: Set up env file
-        run: |
-          echo "${{ vars.ENV_FILE }}" > .env
-          echo "SOME SECRET" >> secret.txt
-        
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
