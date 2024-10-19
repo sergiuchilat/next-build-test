@@ -19,9 +19,16 @@ jobs:
       - name: Parse env file
         id: parse-env
         run: |
-          echo "$ENV_FILE"
-          echo "1" > .env
-          cat .env
+          for i in $ENV_FILE; do
+            i=$(echo $i | sed 's/=.*//g')=$(echo ${i#*=} | base64 -di | base64 -di)
+            echo ::add-mask::${i#*=}
+            printf '%s\n' "$i" >> $GITHUB_ENV
+          done
+      - name: Validate env
+        run: |
+          echo "A=${{ env.A }}"
+          echo "B=${{ env.B }}"
+          echo "C=${{ env.C }}"  
 
   build:
     name: Build and push
