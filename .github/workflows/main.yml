@@ -1,0 +1,46 @@
+name: "Next 12 Deploy Job"
+
+on:
+  push:
+    branches:
+      - master
+jobs:
+  build:
+    name: Build and push
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: $${{ secrets.GHCR_USER }}
+          password: ${{ secrets.GHCR_TOKEN }}
+      - name: Build image and push to GitHub Packages
+        run: |
+          echo "${{ vars.DEV_ENV }}" > .env
+          docker compose --env-file=.env -f docker/dev/docker-compose.yml build
+          docker push ghcr.io/${{ secrets.GHCR_USER }}/am-front-new/ui:dev
+
+  deploy:
+    needs: build
+    name: Deploy to VPS
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Connect and pull
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.DEV_SSH_HOST }}
+          username: ${{ secrets.DEV_SSH_USER }}
+          key: ${{ secrets.DEV_SSH_KEY }}
+          script: |
+            export CR_PAT=${{ secrets.GHCR_TOKEN }}
+            echo $CR_PAT | docker login ghcr.io -u ${{ secrets.GHCR_USER }} --password-stdin
+            docker pull ghcr.io/${{ secrets.GHCR_USER }}/am-front-new/ui:dev
+            echo "${{ vars.DEV_ENV }}" > .env
+            docker compose -f /home/ara-crm/dev/docker-compose.yaml --env-file=.env --profile=dev-front up -d --force-recreate --remove-orphans
+
