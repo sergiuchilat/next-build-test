@@ -8,6 +8,7 @@ jobs:
   build:
     name: Build and push
     runs-on: ubuntu-latest
+    environment: dev
 
     steps:
       - name: Check out
