@@ -25,8 +25,10 @@ jobs:
           TEST_PUBLIC_VALUE: ${{ vars.TEST_PUBLIC_VALUE }}
           TEST_SECRET_VALUE: ${{ secrets.TEST_SECRET_VALUE }}
         run: |
-          echo "ENV_FILE_CONTENT=${{ vars.ENV_FILE }}"
-          source <(echo "${{ vars.ENV_FILE }}")
-          printenv
+          echo "ENV_FILE_CONTENT=${{ vars.ENV_FILE }}" > .env
+          echo "Env File Content START:
+          cat .env
+          echo "Env File Content END"
+
 #          docker compose -f docker-compose.yml --profile=build build
 #          docker push ghcr.io/sergiuchilat/next-build-test/front:dev
