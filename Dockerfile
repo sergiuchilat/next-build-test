@@ -29,4 +29,7 @@ COPY --from=builder --chown=app:app /app/.next ./.next
 
 EXPOSE 3000
 
-CMD ["npm", "run", "start"]
+#CMD ["npm", "run", "start"]
+COPY entrypoint.sh /usr/bin/
+RUN chmod +x /usr/bin/entrypoint.sh
+ENTRYPOINT ["entrypoint.sh"]
