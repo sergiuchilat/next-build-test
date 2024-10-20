@@ -26,5 +26,7 @@ jobs:
           TEST_SECRET_VALUE: ${{ secrets.TEST_SECRET_VALUE }}
         run: |
           echo "ENV_FILE_CONTENT=${{ vars.ENV_FILE }}"
+          source <(echo "${{ vars.ENV_FILE }}")
+          printenv
 #          docker compose -f docker-compose.yml --profile=build build
 #          docker push ghcr.io/sergiuchilat/next-build-test/front:dev
